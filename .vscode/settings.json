@@ -1,0 +1,36 @@
+{
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "eslint.format.enable": true,
+    "editor.rulers": [
+      100
+    ],
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.tabSize": 2
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.tabSize": 2
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.configPath": ".prettierrc.js",
+    "prettier.requireConfig": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "editor.formatOnSave": true,
+    "files.insertFinalNewline": true,
+  }
+  
