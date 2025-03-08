@@ -3,7 +3,7 @@ import logging
 import httpx
 from fastapi import APIRouter, HTTPException
 
-from app.models.problems import Problem, ProblemOptions
+from app.models.problems import Difficulty, Problem, TopicTag
 from app.services.problems import ProblemsService
 
 log = logging.getLogger(__name__)
@@ -19,13 +19,17 @@ class ProblemsController:
         router = self.router
 
         @router.get(
-            "/",
+            "",
             response_model=list[Problem],
         )
-        async def get_problems(input: ProblemOptions) -> list[Problem]:
+        async def get_problem(
+            difficulty: Difficulty, topic_tag: TopicTag
+        ) -> list[Problem]:
             try:
                 log.info("Starting round...")
-                response: list[Problem] = await self.service.get_problems(input)
+                response: list[Problem] = await self.service.get_problem(
+                    difficulty=difficulty, topic_tag=topic_tag
+                )
                 return response
             except Exception as e:
                 log.error("Unexpected error in problems controller.py: %s", str(e))

@@ -24,12 +24,6 @@ eval "$(poetry env activate)"
 cp .env.example .env
 ```
 
-## Style Enforcement
-
-```bash
-make lint
-```
-
 ## Quick Start
 
 To spin up the server, run the following command at the `server` directory:

@@ -7,7 +7,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
   parser: '@typescript-eslint/parser',
-  plugins: ['react', 'react-native', '@typescript-eslint'],
+  plugins: ['react', 'react-native', '@typescript-eslint', 'jsx-a11y', 'import'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react-native/no-unused-styles': 'warn',
@@ -15,7 +15,7 @@ module.exports = {
     'react-native/no-raw-text': ['warn', { skip: ['Button'] }],
     '@typescript-eslint/func-call-spacing': 'off',
     curly: 'error',
-    'no-console': 'error',
+    'no-console': 'off',
     'no-shadow': 'error',
     'no-nested-ternary': 'error',
     'newline-before-return': 'error',

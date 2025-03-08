@@ -1,17 +1,20 @@
-import { API_URL } from '@/apis/constants';
 import axios from 'axios';
 
-import { Difficulty, ProblemOptions, difficulty } from '@/types/problems';
+import { ProblemOptions } from '@/types/problems';
 
-export async function getProblems(problemOptions: ProblemOptions): Promise<void> {
+export async function getProblem(problemOptions: ProblemOptions): Promise<void> {
   try {
-    const response = await axios.get(`${API_URL}`, {
+    const response = await axios.get(`${process.env.EXPO_PUBLIC_API_BASE_URL}/api/problems`, {
       headers: {
         'Content-Type': 'application/json',
+      },
+      params: {
+        difficulty: problemOptions.difficulty,
+        topic_tag: problemOptions.topicTag,
       },
     });
     console.log(response.data);
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error getting problems:', error);
   }
 }
