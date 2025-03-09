@@ -1,3 +1,7 @@
+## NUMBERS
+
+PAGE_LIMIT = 15
+
 # URLs
 
 LEETCODE_API_URL = "https://leetcode.com/graphql/"
