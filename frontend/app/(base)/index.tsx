@@ -3,17 +3,14 @@ import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { Button, RadioButton, Text } from 'react-native-paper';
 
 import { getQuestions } from '@/apis/questions';
-import { z } from 'zod';
 
-import { Difficulty, QuestionFilters, TopicTag, defaultQuestionFilters } from '@/types/questions';
-
-export const questionHeaders = z.object({
-  id: z.string(),
-  title: z.string(),
-  titleSlug: z.string(),
-});
-
-export type QuestionHeader = z.infer<typeof questionHeaders>;
+import {
+  Difficulty,
+  QuestionFilters,
+  QuestionHeader,
+  TopicTag,
+  defaultQuestionFilters,
+} from '@/types/questions';
 
 export default function Index() {
   const [userOptions, setUserOptions] = useState<QuestionFilters>(defaultQuestionFilters);
