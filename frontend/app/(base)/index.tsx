@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, RadioButton, Text } from 'react-native-paper';
 
-import { getProblem } from '@/apis/problems';
+import { getQuestions } from '@/apis/questions';
 
 import { Difficulty, ProblemOptions, TopicTag, defaultProblemOptions } from '@/types/problems';
 
@@ -57,7 +57,7 @@ export default function Index() {
       <Button
         mode="contained"
         className="mt-6 rounded-lg bg-blue-500 py-2"
-        onPress={() => getProblem(userOptions)}
+        onPress={() => getQuestions(userOptions)}
       >
         <Text className="font-bold text-white">Get Problems</Text>
       </Button>

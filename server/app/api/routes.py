@@ -2,8 +2,8 @@ import logging
 
 from fastapi import APIRouter
 
-from app.controllers.problems import ProblemsController
-from app.services.problems import ProblemsService
+from app.controllers.questions import QuestionsController
+from app.services.questions import QuestionsService
 
 log = logging.getLogger(__name__)
 
@@ -22,12 +22,12 @@ async def status():
 
 
 def get_problems_controller_router():
-    service = ProblemsService()
-    return ProblemsController(service=service).router
+    service = QuestionsService()
+    return QuestionsController(service=service).router
 
 
 router.include_router(
     get_problems_controller_router(),
-    tags=["problems"],
-    prefix="/api/problems",
+    tags=["questions"],
+    prefix="/api/questions",
 )
