@@ -1,6 +1,6 @@
-# Server for mobile-code
+# Server
 
-## Install Poetry
+## Set up Poetry
 
 Please follow the official [installation guide](https://python-poetry.org/docs/#installation) to install Poetry, which will be used to manage dependencies and environments.
 
