@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { Button, RadioButton, Text } from 'react-native-paper';
 
-import { getQuestions } from '@/apis/questions';
-
+import { getQuestions } from '~/apis/questions';
+import RadioGroupItemWithLabel from '~/components/shared/radio-group-with-label';
+import { Button } from '~/components/ui/button';
+import { RadioGroup } from '~/components/ui/radio-group';
+import { Text } from '~/components/ui/text';
 import {
   Difficulty,
   QuestionFilters,
   QuestionHeader,
   TopicTag,
   defaultQuestionFilters,
-} from '@/types/questions';
+} from '~/lib/types/questions';
 
 export default function Index() {
   const [userOptions, setUserOptions] = useState<QuestionFilters>(defaultQuestionFilters);
@@ -63,33 +65,48 @@ export default function Index() {
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}
       >
         <Text className="mb-4 text-xl font-bold">Choose Difficulty:</Text>
-        <RadioButton.Group
+        <RadioGroup
           value={userOptions.difficulty}
           onValueChange={(value) => handleDifficultyChange(value as Difficulty)}
         >
           <View className="mb-2">
-            <RadioButton.Item label="Easy" value="Easy" />
+            <RadioGroupItemWithLabel
+              value="Easy"
+              onLabelPress={() => handleDifficultyChange('Easy')}
+            />
           </View>
           <View className="mb-2">
-            <RadioButton.Item label="Medium" value="Medium" />
+            <RadioGroupItemWithLabel
+              value="Medium"
+              onLabelPress={() => handleDifficultyChange('Medium')}
+            />
           </View>
           <View className="mb-2">
-            <RadioButton.Item label="Hard" value="Hard" />
+            <RadioGroupItemWithLabel
+              value="Hard"
+              onLabelPress={() => handleDifficultyChange('Hard')}
+            />
           </View>
-        </RadioButton.Group>
+        </RadioGroup>
 
         <Text className="mb-4 mt-6 text-xl font-bold">Choose Topic Tag:</Text>
-        <RadioButton.Group
+        <RadioGroup
           value={userOptions.topicTag}
           onValueChange={(value) => handleTopicTagChange(value as TopicTag)}
         >
           <View className="mb-2">
-            <RadioButton.Item label="Array" value="array" />
+            <RadioGroupItemWithLabel
+              value="array"
+              onLabelPress={() => handleTopicTagChange('array')}
+            />
           </View>
           <View className="mb-2">
-            <RadioButton.Item label="Backtracking" value="backtracking" />
+            <RadioGroupItemWithLabel
+              value="backtracking"
+              onLabelPress={() => handleTopicTagChange('backtracking')}
+            />
           </View>
-        </RadioButton.Group>
+        </RadioGroup>
 
         <Text className="mb-4 mt-6 text-xl font-bold">Questions:</Text>
         {questions.length > 0 ? (

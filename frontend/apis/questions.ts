@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-import { QuestionFilters, QuestionHeader, questionHeader } from '@/types/questions';
+import { QuestionFilters, QuestionHeader, questionHeader } from '~/lib/types/questions';
 
 export async function getQuestions(questionFilters: QuestionFilters): Promise<QuestionHeader[]> {
   try {

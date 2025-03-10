@@ -4,10 +4,14 @@
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 ```
 
 ```bash
 # Start the app
-npx expo start
+pnpm dev
 ```
+
+## Credits
+
+UI components: <https://github.com/mrzachnugent/react-native-reusables>
