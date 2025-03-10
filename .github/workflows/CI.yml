@@ -73,7 +73,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: npm install
+        run: pnpm install
 
       - name: Run Prettier
         working-directory: ./frontend
