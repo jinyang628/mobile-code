@@ -29,13 +29,11 @@
   "prettier.requireConfig": true,
   "eslint.workingDirectories": [
     {
+      "mode": "auto",
       "directory": "./frontend",
       "changeProcessCWD": true
     }
   ],
-  "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit"
-  },
   "[python]": {
       "editor.defaultFormatter": "ms-python.black-formatter",
       "editor.codeActionsOnSave": {
