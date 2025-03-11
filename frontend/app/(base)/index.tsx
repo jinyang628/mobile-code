@@ -12,6 +12,8 @@ import {
   QuestionHeader,
   TopicTag,
   defaultQuestionFilters,
+  difficulty,
+  topicTag,
 } from '~/lib/types/questions';
 
 export default function Index() {
@@ -60,83 +62,83 @@ export default function Index() {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-gray-100 p-4">
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}
-      >
-        <Text className="mb-4 text-xl font-bold">Choose Difficulty:</Text>
-        <RadioGroup
-          value={userOptions.difficulty}
-          onValueChange={(value) => handleDifficultyChange(value as Difficulty)}
-        >
-          <View className="mb-2">
-            <RadioGroupItemWithLabel
-              value="Easy"
-              onLabelPress={() => handleDifficultyChange('Easy')}
-            />
-          </View>
-          <View className="mb-2">
-            <RadioGroupItemWithLabel
-              value="Medium"
-              onLabelPress={() => handleDifficultyChange('Medium')}
-            />
-          </View>
-          <View className="mb-2">
-            <RadioGroupItemWithLabel
-              value="Hard"
-              onLabelPress={() => handleDifficultyChange('Hard')}
-            />
-          </View>
-        </RadioGroup>
-
-        <Text className="mb-4 mt-6 text-xl font-bold">Choose Topic Tag:</Text>
-        <RadioGroup
-          value={userOptions.topicTag}
-          onValueChange={(value) => handleTopicTagChange(value as TopicTag)}
-        >
-          <View className="mb-2">
-            <RadioGroupItemWithLabel
-              value="array"
-              onLabelPress={() => handleTopicTagChange('array')}
-            />
-          </View>
-          <View className="mb-2">
-            <RadioGroupItemWithLabel
-              value="backtracking"
-              onLabelPress={() => handleTopicTagChange('backtracking')}
-            />
-          </View>
-        </RadioGroup>
-
-        <Text className="mb-4 mt-6 text-xl font-bold">Questions:</Text>
-        {questions.length > 0 ? (
-          questions.map((question) => (
-            <TouchableOpacity
-              key={question.id}
-              className="mb-2 w-full items-center rounded-lg bg-white p-4 shadow-sm"
-            >
-              <Text className="text-lg">{question.title}</Text>
-            </TouchableOpacity>
-          ))
-        ) : (
-          <Text className="text-gray-500">No questions found.</Text>
-        )}
-
-        <View className="mt-6 w-full flex-row items-center justify-between">
-          <Button
-            mode="contained"
-            disabled={userOptions.page === 1}
-            className="bg-blue-500"
-            onPress={decrementPage}
+    <View className="flex-1 bg-gray-100 p-4">
+      {/* Fixed height container */}
+      <View style={{ height: '90%' }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          {/* Difficulty Section */}
+          <Text className="mb-4 text-xl font-bold">Difficulty</Text>
+          <RadioGroup
+            value={userOptions.difficulty}
+            onValueChange={(value) => handleDifficultyChange(value as Difficulty)}
+            style={{ flexDirection: 'row', flexWrap: 'wrap' }} // Make radio group horizontal
           >
-            Previous
-          </Button>
-          <Text className="text-lg font-bold">Page {userOptions.page}</Text>
-          <Button mode="contained" className="bg-blue-500" onPress={incrementPage}>
-            Next
-          </Button>
-        </View>
-      </ScrollView>
+            {difficulty.options.map((difficulty) => (
+              <View key={difficulty} className="mb-2 mr-4">
+                <RadioGroupItemWithLabel
+                  value={difficulty}
+                  onLabelPress={() => handleDifficultyChange(difficulty)}
+                />
+              </View>
+            ))}
+          </RadioGroup>
+
+          {/* Topic Tag Section */}
+          <Text className="mb-4 mt-6 text-xl font-bold">Topic Tag</Text>
+          <ScrollView
+            className="h-40"
+            contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }} // Make topic tags wrap
+          >
+            <RadioGroup
+              value={userOptions.topicTag}
+              onValueChange={(value) => handleTopicTagChange(value as TopicTag)}
+            >
+              {topicTag.options.sort().map((topicTag) => (
+                <View key={topicTag} className="mb-2 mr-4">
+                  <RadioGroupItemWithLabel
+                    value={topicTag}
+                    onLabelPress={() => handleTopicTagChange(topicTag)}
+                  />
+                </View>
+              ))}
+            </RadioGroup>
+          </ScrollView>
+
+          {/* Questions Section */}
+          <Text className="mb-4 mt-6 text-xl font-bold">Questions:</Text>
+          <ScrollView style={{ maxHeight: 200 }}>
+            {' '}
+            {/* Fixed height for questions scroll */}
+            {questions.length > 0 ? (
+              questions.map((question) => (
+                <TouchableOpacity
+                  key={question.id}
+                  className="mb-2 w-full items-center rounded-lg bg-white p-4 shadow-sm"
+                >
+                  <Text className="text-lg">{question.title}</Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text className="text-gray-500">No questions found.</Text>
+            )}
+          </ScrollView>
+
+          {/* Pagination Section */}
+          <View className="mt-6 w-full flex-row items-center justify-between">
+            <Button
+              disabled={userOptions.page === 1}
+              className="bg-blue-500"
+              onPress={decrementPage}
+            >
+              Previous
+            </Button>
+            <Text className="text-lg font-bold">Page {userOptions.page}</Text>
+            <Button className="bg-blue-500" onPress={incrementPage}>
+              Next
+            </Button>
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 }
