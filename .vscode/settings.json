@@ -25,7 +25,7 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "prettier.configPath": "./frontend/.prettierrc.js",
+  "prettier.configPath": "./frontend/.prettierrc.cjs",
   "prettier.requireConfig": true,
   "eslint.workingDirectories": [
     {
@@ -34,6 +34,7 @@
       "changeProcessCWD": true
     }
   ],
+  "eslint.useFlatConfig": false,
   "[python]": {
       "editor.defaultFormatter": "ms-python.black-formatter",
       "editor.codeActionsOnSave": {
