@@ -55,7 +55,7 @@ export default function RootLayout() {
         <Stack.Screen
           name="(base)"
           options={{
-            title: 'Starter Base',
+            title: 'Problem Selection',
             // eslint-disable-next-line react/no-unstable-nested-components
             headerRight: () => <ThemeToggle />,
           }}
