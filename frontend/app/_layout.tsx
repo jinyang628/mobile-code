@@ -56,6 +56,7 @@ export default function RootLayout() {
           name="(base)"
           options={{
             title: 'Starter Base',
+            // eslint-disable-next-line react/no-unstable-nested-components
             headerRight: () => <ThemeToggle />,
           }}
         />

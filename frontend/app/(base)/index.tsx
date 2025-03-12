@@ -33,17 +33,17 @@ export default function Index() {
     fetchQuestions();
   }, [userOptions]);
 
-  const handleDifficultyChange = (difficulty: Difficulty) => {
+  const handleDifficultyChange = (diff: Difficulty) => {
     setUserOptions((prevOptions) => ({
       ...prevOptions,
-      difficulty,
+      diff,
     }));
   };
 
-  const handleTopicTagChange = (topicTag: TopicTag) => {
+  const handleTopicTagChange = (tag: TopicTag) => {
     setUserOptions((prevOptions) => ({
       ...prevOptions,
-      topicTag,
+      tag,
     }));
   };
 
@@ -70,14 +70,14 @@ export default function Index() {
           <Text className="mb-4 text-xl font-bold">Difficulty</Text>
           <RadioGroup
             value={userOptions.difficulty}
-            onValueChange={(value) => handleDifficultyChange(value as Difficulty)}
             style={{ flexDirection: 'row', flexWrap: 'wrap' }} // Make radio group horizontal
+            onValueChange={(value) => handleDifficultyChange(value as Difficulty)}
           >
-            {difficulty.options.map((difficulty) => (
-              <View key={difficulty} className="mb-2 mr-4">
+            {difficulty.options.map((diff) => (
+              <View key={diff} className="mb-2 mr-4">
                 <RadioGroupItemWithLabel
-                  value={difficulty}
-                  onLabelPress={() => handleDifficultyChange(difficulty)}
+                  value={diff}
+                  onLabelPress={() => handleDifficultyChange(diff)}
                 />
               </View>
             ))}
@@ -93,11 +93,11 @@ export default function Index() {
               value={userOptions.topicTag}
               onValueChange={(value) => handleTopicTagChange(value as TopicTag)}
             >
-              {topicTag.options.sort().map((topicTag) => (
-                <View key={topicTag} className="mb-2 mr-4">
+              {topicTag.options.sort().map((tag) => (
+                <View key={tag} className="mb-2 mr-4">
                   <RadioGroupItemWithLabel
-                    value={topicTag}
-                    onLabelPress={() => handleTopicTagChange(topicTag)}
+                    value={tag}
+                    onLabelPress={() => handleTopicTagChange(tag)}
                   />
                 </View>
               ))}
