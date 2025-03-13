@@ -1,136 +1,141 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
-import { getQuestions } from '~/apis/questions';
-import RadioGroupItemWithLabel from '~/components/shared/radio-group-with-label';
-import { Button } from '~/components/ui/button';
-import { RadioGroup } from '~/components/ui/radio-group';
-import { Text } from '~/components/ui/text';
+import FiltersScreen from '~/components/index/filters';
+import QuestionsScreen from '~/components/index/questions';
 import {
   Difficulty,
   QuestionFilters,
-  QuestionHeader,
   TopicTag,
   defaultQuestionFilters,
-  difficulty,
-  topicTag,
 } from '~/lib/types/questions';
 
+const { width } = Dimensions.get('window');
+
 export default function Index() {
-  const [userOptions, setUserOptions] = useState<QuestionFilters>(defaultQuestionFilters);
-  const [questions, setQuestions] = useState<QuestionHeader[]>([]);
+  const [questionFilters, setQuestionFilters] = useState<QuestionFilters>(defaultQuestionFilters);
+  // Animation values
+  const translateX = useSharedValue(0);
+  const [isQuestionsScreenActive, setIsQuestionsScreenActive] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const data: QuestionHeader[] = await getQuestions(userOptions);
-        setQuestions(data);
-      } catch (error) {
-        console.error('Failed to fetch questions:', error);
-        setQuestions([]);
+  const onDifficultyChange = (diff: Difficulty) => {
+    setQuestionFilters((prevOptions) => ({
+      ...prevOptions,
+      difficulty: diff,
+      page: 1,
+    }));
+  };
+
+  const onTopicTagChange = (tag: TopicTag) => {
+    setQuestionFilters((prevOptions) => ({
+      ...prevOptions,
+      topicTag: tag,
+      page: 1,
+    }));
+  };
+
+  const onPageIncrement = () => {
+    setQuestionFilters((prevFilters) => ({
+      ...prevFilters,
+      page: prevFilters.page + 1,
+    }));
+  };
+
+  const onPageDecrement = () => {
+    setQuestionFilters((prevFilters) => ({
+      ...prevFilters,
+      page: Math.max(prevFilters.page - 1, 1),
+    }));
+  };
+
+  // Update screen state
+  const updateScreenState = (isActive: boolean) => {
+    setIsQuestionsScreenActive(isActive);
+  };
+
+  // Pan gesture using Gesture API (v2)
+  const panGesture = Gesture.Pan()
+    .activeOffsetX([-10, 10]) // Only activate for horizontal movement
+    .failOffsetY([-15, 15]) // Fail the gesture if there's significant vertical movement
+    .onUpdate((event) => {
+      // Only allow movement between screens, not arbitrary positions
+      if (
+        (isQuestionsScreenActive && event.translationX > 0) ||
+        (!isQuestionsScreenActive && event.translationX < 0)
+      ) {
+        // Limit the drag to prevent stretching beyond screen boundaries
+        const maxDrag = isQuestionsScreenActive ? width : width;
+        const dragAmount =
+          Math.min(Math.abs(event.translationX), maxDrag) * (event.translationX < 0 ? -1 : 1);
+
+        translateX.value = isQuestionsScreenActive ? -width + dragAmount : dragAmount;
       }
+    })
+    .onEnd((event) => {
+      // Snap to either filters or questions screen, no in-between states
+      if (
+        (event.velocityX < -500 && !isQuestionsScreenActive) ||
+        (Math.abs(event.translationX) > width / 3 &&
+          event.translationX < 0 &&
+          !isQuestionsScreenActive)
+      ) {
+        // Swipe left to questions with velocity or significant drag
+        translateX.value = withSpring(-width, { damping: 20, stiffness: 150 });
+        runOnJS(updateScreenState)(true);
+      } else if (
+        (event.velocityX > 500 && isQuestionsScreenActive) ||
+        (Math.abs(event.translationX) > width / 3 &&
+          event.translationX > 0 &&
+          isQuestionsScreenActive)
+      ) {
+        // Swipe right to filters with velocity or significant drag
+        translateX.value = withSpring(0, { damping: 20, stiffness: 150 });
+        runOnJS(updateScreenState)(false);
+      } else {
+        // Snap back to current screen if gesture wasn't decisive
+        translateX.value = withSpring(isQuestionsScreenActive ? -width : 0, {
+          damping: 20,
+          stiffness: 150,
+        });
+      }
+    });
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
     };
-    fetchQuestions();
-  }, [userOptions]);
-
-  const handleDifficultyChange = (diff: Difficulty) => {
-    setUserOptions((prevOptions) => ({
-      ...prevOptions,
-      diff,
-    }));
-  };
-
-  const handleTopicTagChange = (tag: TopicTag) => {
-    setUserOptions((prevOptions) => ({
-      ...prevOptions,
-      tag,
-    }));
-  };
-
-  const incrementPage = () => {
-    setUserOptions((prevOptions) => ({
-      ...prevOptions,
-      page: prevOptions.page + 1,
-    }));
-  };
-
-  const decrementPage = () => {
-    setUserOptions((prevOptions) => ({
-      ...prevOptions,
-      page: Math.max(prevOptions.page - 1, 1),
-    }));
-  };
+  });
 
   return (
-    <View className="flex-1 p-4">
-      <View className="mx-auto flex h-[90%] justify-center p-3">
-        <ScrollView className="flex-1">
-          <Text className="mb-4 text-xl font-bold">Difficulty</Text>
-          <RadioGroup
-            className="flex-row flex-wrap"
-            value={userOptions.difficulty}
-            onValueChange={(value) => handleDifficultyChange(value as Difficulty)}
-          >
-            {difficulty.options.map((diff) => (
-              <View key={diff} className="mb-2 mr-4">
-                <RadioGroupItemWithLabel
-                  value={diff}
-                  onLabelPress={() => handleDifficultyChange(diff)}
-                />
-              </View>
-            ))}
-          </RadioGroup>
-
-          <Text className="mb-4 mt-6 text-xl font-bold">Topic</Text>
-          <View className="h-40">
-            <ScrollView className="flex-row flex-wrap">
-              <RadioGroup
-                value={userOptions.topicTag}
-                onValueChange={(value) => handleTopicTagChange(value as TopicTag)}
-              >
-                {topicTag.options.sort().map((tag) => (
-                  <View key={tag} className="mb-2 mr-4">
-                    <RadioGroupItemWithLabel
-                      value={tag}
-                      onLabelPress={() => handleTopicTagChange(tag)}
-                    />
-                  </View>
-                ))}
-              </RadioGroup>
-            </ScrollView>
+    <View className="flex-1">
+      <GestureDetector gesture={panGesture}>
+        <Animated.View style={[{ width: width * 2, flexDirection: 'row' }, animatedStyle]}>
+          <View style={{ width }} className="flex-1 p-4">
+            <FiltersScreen
+              userOptions={questionFilters}
+              isScreenActive={!isQuestionsScreenActive}
+              onDifficultyChange={onDifficultyChange}
+              onTopicTagChange={onTopicTagChange}
+            />
           </View>
 
-          <Text className="mb-4 mt-6 text-xl font-bold">Questions</Text>
-          <ScrollView className="max-h-[200px]">
-            {questions.length > 0 ? (
-              questions.map((question) => (
-                <TouchableOpacity
-                  key={question.id}
-                  className="mb-2 w-full items-center rounded-lg border-2 border-gray-900 p-4 shadow-sm dark:border-white"
-                >
-                  <Text className="text-lg">{question.title}</Text>
-                </TouchableOpacity>
-              ))
-            ) : (
-              <Text className="text-gray-500">No questions found.</Text>
-            )}
-          </ScrollView>
-
-          <View className="mt-6 w-full flex-row items-center justify-between">
-            <Button
-              disabled={userOptions.page === 1}
-              className="bg-blue-500"
-              onPress={decrementPage}
-            >
-              Previous
-            </Button>
-            <Text className="text-lg font-bold">Page {userOptions.page}</Text>
-            <Button className="bg-blue-500" onPress={incrementPage}>
-              Next
-            </Button>
+          <View style={{ width }} className="flex-1 p-4">
+            <QuestionsScreen
+              isScreenActive={isQuestionsScreenActive}
+              questionFilters={questionFilters}
+              onPageIncrement={onPageIncrement}
+              onPageDecrement={onPageDecrement}
+            />
           </View>
-        </ScrollView>
-      </View>
+        </Animated.View>
+      </GestureDetector>
     </View>
   );
 }

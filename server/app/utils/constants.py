@@ -1,6 +1,6 @@
 ## NUMBERS
 
-PAGE_LIMIT = 15
+PAGE_LIMIT = 5
 
 # URLs
 
