@@ -1,7 +1,8 @@
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { Chase } from 'react-native-animated-spinkit';
 
 import { useQuery } from '@tanstack/react-query';
+import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { getQuestions } from '~/apis/questions';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
@@ -9,13 +10,11 @@ import { QuestionFilters, QuestionHeader } from '~/lib/types/questions';
 import { useColorScheme } from '~/lib/useColorScheme';
 
 type QuestionsScreenProps = {
-  isScreenActive: boolean;
   questionFilters: QuestionFilters;
   onPageIncrement: () => void;
   onPageDecrement: () => void;
 };
 export default function QuestionsScreen({
-  isScreenActive,
   questionFilters,
   onPageIncrement,
   onPageDecrement,
@@ -27,11 +26,13 @@ export default function QuestionsScreen({
     queryFn: () => getQuestions(questionFilters),
   });
 
+  const contentColor = isDarkColorScheme ? '#FFFFFF' : '#000000';
+
   const renderQuestions = () => {
     if (isLoading) {
       return (
         <View className="flex items-center justify-center p-8">
-          <Chase size={48} color={isDarkColorScheme ? '#FFFFFF' : '#000000'} />
+          <Chase size={48} color={contentColor} />
         </View>
       );
     }
@@ -42,7 +43,7 @@ export default function QuestionsScreen({
     return questions.map((qn) => (
       <TouchableOpacity
         key={qn.id}
-        className="mb-2 w-full items-center rounded-lg border-2 border-gray-900 p-4 shadow-sm dark:border-white"
+        className="mb-2 w-full items-center rounded-lg border-2 border-gray-900 p-4 dark:border-white"
       >
         <Text className="text-center text-lg">{qn.title}</Text>
       </TouchableOpacity>
@@ -50,28 +51,26 @@ export default function QuestionsScreen({
   };
 
   return (
-    <View>
-      <ScrollView className="mb-4 flex-1" scrollEnabled={isScreenActive}>
-        {renderQuestions()}
-      </ScrollView>
+    <SafeAreaView className="flex-1">
+      <View className="flex-1 pb-24">{renderQuestions()}</View>
 
-      <View className="w-full flex-row items-center justify-between">
+      <View className="absolute bottom-20 left-0 right-0 flex-row items-center justify-between px-4">
         <Button
           disabled={questionFilters.page === 1 || isLoading}
-          className="w-20 bg-blue-500 dark:bg-blue-400"
+          className="w-15 aspect-square items-center justify-center bg-blue-500 disabled:opacity-50 dark:bg-blue-400"
           onPress={onPageDecrement}
         >
-          <Text>Previous</Text>
+          <ChevronLeft size={25} color={contentColor} />
         </Button>
         <Text className="text-lg font-bold">Page {questionFilters.page}</Text>
         <Button
-          className="w-20 bg-blue-500 dark:bg-blue-400"
+          className="w-15 aspect-square items-center justify-center bg-blue-500 disabled:opacity-50 dark:bg-blue-400"
           disabled={questions.length === 0 || isLoading}
           onPress={onPageIncrement}
         >
-          <Text>Next</Text>
+          <ChevronRight size={25} color={contentColor} />
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

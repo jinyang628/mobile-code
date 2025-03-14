@@ -117,7 +117,6 @@ export default function Index() {
           <View className="flex-1 p-4" style={{ width }}>
             <FiltersScreen
               userOptions={questionFilters}
-              isScreenActive={!isQuestionsScreenActive}
               onDifficultyChange={onDifficultyChange}
               onTopicTagChange={onTopicTagChange}
             />
@@ -125,7 +124,6 @@ export default function Index() {
 
           <View className="flex-1 p-4" style={{ width }}>
             <QuestionsScreen
-              isScreenActive={isQuestionsScreenActive}
               questionFilters={questionFilters}
               onPageIncrement={onPageIncrement}
               onPageDecrement={onPageDecrement}

@@ -7,14 +7,12 @@ import { Difficulty, QuestionFilters, TopicTag, difficulty, topicTag } from '~/l
 
 type FiltersScreenProps = {
   userOptions: QuestionFilters;
-  isScreenActive: boolean;
   onDifficultyChange: (diff: Difficulty) => void;
   onTopicTagChange: (tag: TopicTag) => void;
 };
 
 export default function FiltersScreen({
   userOptions,
-  isScreenActive,
   onDifficultyChange,
   onTopicTagChange,
 }: FiltersScreenProps) {
@@ -38,7 +36,7 @@ export default function FiltersScreen({
       {/* Topic Section (Scrollable) */}
       <View className="mb-10 flex-1 pb-3">
         <Text className="my-4 text-xl font-bold">Topic</Text>
-        <ScrollView className="flex-1" scrollEnabled={isScreenActive}>
+        <ScrollView className="flex-1">
           <RadioGroup
             value={userOptions.topicTag}
             onValueChange={(value) => onTopicTagChange(value as TopicTag)}
