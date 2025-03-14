@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -21,7 +21,6 @@ const { width } = Dimensions.get('window');
 
 export default function Index() {
   const [questionFilters, setQuestionFilters] = useState<QuestionFilters>(defaultQuestionFilters);
-  // Animation values
   const translateX = useSharedValue(0);
   const [isQuestionsScreenActive, setIsQuestionsScreenActive] = useState<boolean>(false);
 
@@ -55,16 +54,20 @@ export default function Index() {
     }));
   };
 
-  // Update screen state
   const updateScreenState = (isActive: boolean) => {
     setIsQuestionsScreenActive(isActive);
   };
 
+  const toggleScreen = () => {
+    const newState = !isQuestionsScreenActive;
+    translateX.value = withSpring(newState ? -width : 0, { damping: 20, stiffness: 150 });
+    setIsQuestionsScreenActive(newState);
+  };
+
   const panGesture = Gesture.Pan()
-    .activeOffsetX([-10, 10]) // Only activate for horizontal movement
-    .failOffsetY([-15, 15]) // Fail the gesture if there's significant vertical movement
+    .activeOffsetX([-10, 10])
+    .failOffsetY([-15, 15])
     .onUpdate((event) => {
-      // Clamp the translationX value to prevent scrolling past the second screen
       const clampedTranslationX = Math.max(Math.min(event.translationX, 0), -width);
 
       if (
@@ -83,7 +86,6 @@ export default function Index() {
           event.translationX < 0 &&
           !isQuestionsScreenActive)
       ) {
-        // Swipe left to questions with velocity or significant drag
         translateX.value = withSpring(-width, { damping: 20, stiffness: 150 });
         runOnJS(updateScreenState)(true);
       } else if (
@@ -92,11 +94,9 @@ export default function Index() {
           event.translationX > 0 &&
           isQuestionsScreenActive)
       ) {
-        // Swipe right to filters with velocity or significant drag
         translateX.value = withSpring(0, { damping: 20, stiffness: 150 });
         runOnJS(updateScreenState)(false);
       } else {
-        // Snap back to current screen if gesture wasn't decisive
         translateX.value = withSpring(isQuestionsScreenActive ? -width : 0, {
           damping: 20,
           stiffness: 150,
@@ -120,6 +120,12 @@ export default function Index() {
               onDifficultyChange={onDifficultyChange}
               onTopicTagChange={onTopicTagChange}
             />
+            <TouchableOpacity
+              className="absolute right-0 top-1/2 -mt-6 rounded-l-full bg-blue-500 p-3"
+              onPress={toggleScreen}
+            >
+              <Text className="text-white">›</Text>
+            </TouchableOpacity>
           </View>
 
           <View className="flex-1 p-4" style={{ width }}>
@@ -128,6 +134,12 @@ export default function Index() {
               onPageIncrement={onPageIncrement}
               onPageDecrement={onPageDecrement}
             />
+            <TouchableOpacity
+              className="absolute left-0 top-1/2 -mt-6 rounded-r-full bg-blue-500 p-3"
+              onPress={toggleScreen}
+            >
+              <Text className="text-white">‹</Text>
+            </TouchableOpacity>
           </View>
         </Animated.View>
       </GestureDetector>
