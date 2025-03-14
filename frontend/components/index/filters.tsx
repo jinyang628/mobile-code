@@ -19,35 +19,43 @@ export default function FiltersScreen({
   onTopicTagChange,
 }: FiltersScreenProps) {
   return (
-    <ScrollView className="flex-1" scrollEnabled={isScreenActive}>
-      <Text className="mb-4 text-xl font-bold">Difficulty</Text>
-      <RadioGroup
-        className="flex-row flex-wrap"
-        value={userOptions.difficulty}
-        onValueChange={(value) => onDifficultyChange(value as Difficulty)}
-      >
-        {difficulty.options.map((diff) => (
-          <View key={diff} className="mb-2 mr-4">
-            <RadioGroupItemWithLabel value={diff} onLabelPress={() => onDifficultyChange(diff)} />
-          </View>
-        ))}
-      </RadioGroup>
+    <View className="flex-1">
+      <View>
+        <Text className="mb-4 text-xl font-bold">Difficulty</Text>
+        <RadioGroup
+          className="flex-row flex-wrap"
+          value={userOptions.difficulty}
+          onValueChange={(value) => onDifficultyChange(value as Difficulty)}
+        >
+          {difficulty.options.map((diff) => (
+            <View key={diff} className="mb-2 mr-4 pl-2">
+              <RadioGroupItemWithLabel value={diff} onLabelPress={() => onDifficultyChange(diff)} />
+            </View>
+          ))}
+        </RadioGroup>
+      </View>
 
-      <Text className="mb-4 mt-6 text-xl font-bold">Topic</Text>
-      <View className="h-40">
-        <ScrollView className="flex-row flex-wrap">
+      {/* Topic Section (Scrollable) */}
+      <View className="mb-10 flex-1 pb-3">
+        <Text className="my-4 text-xl font-bold">Topic</Text>
+        <ScrollView className="flex-1" scrollEnabled={isScreenActive}>
           <RadioGroup
             value={userOptions.topicTag}
             onValueChange={(value) => onTopicTagChange(value as TopicTag)}
           >
-            {topicTag.options.sort().map((tag) => (
-              <View key={tag} className="mb-2 mr-4">
-                <RadioGroupItemWithLabel value={tag} onLabelPress={() => onTopicTagChange(tag)} />
-              </View>
-            ))}
+            <View className="flex-row flex-wrap">
+              {topicTag.options.sort().map((item) => (
+                <View key={item} className="w-full p-2">
+                  <RadioGroupItemWithLabel
+                    value={item}
+                    onLabelPress={() => onTopicTagChange(item)}
+                  />
+                </View>
+              ))}
+            </View>
           </RadioGroup>
         </ScrollView>
       </View>
-    </ScrollView>
+    </View>
   );
 }

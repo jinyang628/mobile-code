@@ -60,26 +60,23 @@ export default function Index() {
     setIsQuestionsScreenActive(isActive);
   };
 
-  // Pan gesture using Gesture API (v2)
   const panGesture = Gesture.Pan()
     .activeOffsetX([-10, 10]) // Only activate for horizontal movement
     .failOffsetY([-15, 15]) // Fail the gesture if there's significant vertical movement
     .onUpdate((event) => {
-      // Only allow movement between screens, not arbitrary positions
+      // Clamp the translationX value to prevent scrolling past the second screen
+      const clampedTranslationX = Math.max(Math.min(event.translationX, 0), -width);
+
       if (
         (isQuestionsScreenActive && event.translationX > 0) ||
         (!isQuestionsScreenActive && event.translationX < 0)
       ) {
-        // Limit the drag to prevent stretching beyond screen boundaries
-        const maxDrag = isQuestionsScreenActive ? width : width;
-        const dragAmount =
-          Math.min(Math.abs(event.translationX), maxDrag) * (event.translationX < 0 ? -1 : 1);
-
-        translateX.value = isQuestionsScreenActive ? -width + dragAmount : dragAmount;
+        translateX.value = isQuestionsScreenActive
+          ? -width + clampedTranslationX
+          : clampedTranslationX;
       }
     })
     .onEnd((event) => {
-      // Snap to either filters or questions screen, no in-between states
       if (
         (event.velocityX < -500 && !isQuestionsScreenActive) ||
         (Math.abs(event.translationX) > width / 3 &&
@@ -116,8 +113,8 @@ export default function Index() {
   return (
     <View className="flex-1">
       <GestureDetector gesture={panGesture}>
-        <Animated.View style={[{ width: width * 2, flexDirection: 'row' }, animatedStyle]}>
-          <View style={{ width }} className="flex-1 p-4">
+        <Animated.View className="h-screen flex-row" style={[{ width: width * 2 }, animatedStyle]}>
+          <View className="flex-1 p-4" style={{ width }}>
             <FiltersScreen
               userOptions={questionFilters}
               isScreenActive={!isQuestionsScreenActive}
@@ -126,7 +123,7 @@ export default function Index() {
             />
           </View>
 
-          <View style={{ width }} className="flex-1 p-4">
+          <View className="flex-1 p-4" style={{ width }}>
             <QuestionsScreen
               isScreenActive={isQuestionsScreenActive}
               questionFilters={questionFilters}
