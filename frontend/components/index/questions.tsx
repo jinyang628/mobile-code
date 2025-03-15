@@ -4,14 +4,14 @@ import { Chase } from 'react-native-animated-spinkit';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
-import { fetchQuestionListMetadata } from '~/apis/questions';
+import { fetchLeetcodeQuestionListMetadata } from '~/apis/leetcode';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
-import { QuestionFilters, QuestionMetadata } from '~/lib/types/questions';
+import { LeetcodeQuestionFilters, LeetcodeQuestionMetadata } from '~/lib/types/leetcode';
 import { useColorScheme } from '~/lib/useColorScheme';
 
 type QuestionsScreenProps = {
-  questionFilters: QuestionFilters;
+  questionFilters: LeetcodeQuestionFilters;
   onPageIncrement: () => void;
   onPageDecrement: () => void;
 };
@@ -22,9 +22,9 @@ export default function QuestionsScreen({
 }: QuestionsScreenProps) {
   const { isDarkColorScheme } = useColorScheme();
 
-  const { data: questions = [], isLoading } = useQuery<QuestionMetadata[]>({
+  const { data: questions = [], isLoading } = useQuery<LeetcodeQuestionMetadata[]>({
     queryKey: ['questions', questionFilters],
-    queryFn: () => fetchQuestionListMetadata(questionFilters),
+    queryFn: () => fetchLeetcodeQuestionListMetadata(questionFilters),
   });
 
   const contentColor = isDarkColorScheme ? '#FFFFFF' : '#000000';

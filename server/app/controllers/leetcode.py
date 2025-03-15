@@ -3,14 +3,19 @@ import logging
 import httpx
 from fastapi import APIRouter, HTTPException
 
-from app.models.questions import Difficulty, Question, QuestionMetadata, TopicTag
-from app.services.questions import QuestionsService
+from app.models.questions import (
+    Difficulty,
+    LeetcodeQuestion,
+    LeetcodeQuestionMetadata,
+    TopicTag,
+)
+from app.services.questions import LeetcodeService
 
 log = logging.getLogger(__name__)
 
 
-class QuestionsController:
-    def __init__(self, service: QuestionsService):
+class LeetcodeController:
+    def __init__(self, service: LeetcodeService):
         self.router = APIRouter()
         self.service = service
         self.setup_routes()
@@ -20,16 +25,16 @@ class QuestionsController:
 
         @router.get(
             "/metadata",
-            response_model=list[QuestionMetadata],
+            response_model=list[LeetcodeQuestionMetadata],
         )
-        async def fetch_question_list_metadata(
+        async def fetch_leetcode_question_list_metadata(
             difficulty: Difficulty, topic_tag: TopicTag, page: int
-        ) -> list[QuestionMetadata]:
+        ) -> list[LeetcodeQuestionMetadata]:
             """Fetches the list of question metadata for the user to choose from, based on the provided difficulty and topic tag."""
             try:
                 log.info("Fetching question list metadata...")
-                response: list[QuestionMetadata] = (
-                    await self.service.fetch_question_list_metadata(
+                response: list[LeetcodeQuestionMetadata] = (
+                    await self.service.fetch_leetcode_question_list_metadata(
                         difficulty=difficulty, topic_tag=topic_tag, page=page
                     )
                 )
@@ -46,12 +51,12 @@ class QuestionsController:
 
         @router.get(
             "",
-            response_model=Question,
+            response_model=LeetcodeQuestion,
         )
-        async def fetch_question(title_slug: str) -> Question:
+        async def fetch_leetcode_question(title_slug: str) -> LeetcodeQuestion:
             try:
                 log.info("Fetching question data...")
-                response: Question = await self.service.fetch_question(
+                response: LeetcodeQuestion = await self.service.fetch_leetcode_question(
                     title_slug=title_slug
                 )
                 log.info(f"{response.title} data retrieved successfully.")

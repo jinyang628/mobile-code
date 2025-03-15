@@ -2,8 +2,8 @@ import logging
 
 from fastapi import APIRouter
 
-from app.controllers.questions import QuestionsController
-from app.services.questions import QuestionsService
+from app.controllers.leetcode import LeetcodeController
+from app.services.questions import LeetcodeService
 
 log = logging.getLogger(__name__)
 
@@ -21,13 +21,13 @@ async def status():
 ### Problems
 
 
-def get_problems_controller_router():
-    service = QuestionsService()
-    return QuestionsController(service=service).router
+def get_leetcode_controller_router():
+    service = LeetcodeService()
+    return LeetcodeController(service=service).router
 
 
 router.include_router(
-    get_problems_controller_router(),
-    tags=["questions"],
-    prefix="/api/questions",
+    get_leetcode_controller_router(),
+    tags=["leetcode"],
+    prefix="/api/leetcode",
 )

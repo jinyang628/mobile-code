@@ -3,10 +3,16 @@ import { ScrollView, View } from 'react-native';
 import RadioGroupItemWithLabel from '~/components/shared/radio-group-with-label';
 import { RadioGroup } from '~/components/ui/radio-group';
 import { Text } from '~/components/ui/text';
-import { Difficulty, QuestionFilters, TopicTag, difficulty, topicTag } from '~/lib/types/questions';
+import {
+  Difficulty,
+  LeetcodeQuestionFilters,
+  TopicTag,
+  difficulty,
+  topicTag,
+} from '~/lib/types/leetcode';
 
 type FiltersScreenProps = {
-  userOptions: QuestionFilters;
+  userOptions: LeetcodeQuestionFilters;
   onDifficultyChange: (diff: Difficulty) => void;
   onTopicTagChange: (tag: TopicTag) => void;
 };

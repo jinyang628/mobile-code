@@ -12,15 +12,17 @@ import FiltersScreen from '~/components/index/filters';
 import QuestionsScreen from '~/components/index/questions';
 import {
   Difficulty,
-  QuestionFilters,
+  LeetcodeQuestionFilters,
   TopicTag,
-  defaultQuestionFilters,
-} from '~/lib/types/questions';
+  defaultLeetcodeQuestionFilters,
+} from '~/lib/types/leetcode';
 
 const { width } = Dimensions.get('window');
 
 export default function Index() {
-  const [questionFilters, setQuestionFilters] = useState<QuestionFilters>(defaultQuestionFilters);
+  const [questionFilters, setQuestionFilters] = useState<LeetcodeQuestionFilters>(
+    defaultLeetcodeQuestionFilters,
+  );
   const translateX = useSharedValue(0);
   const [isQuestionsScreenActive, setIsQuestionsScreenActive] = useState<boolean>(false);
 

@@ -4,8 +4,8 @@ import httpx
 
 from app.models.questions import (
     Difficulty,
-    Question,
-    QuestionMetadata,
+    LeetcodeQuestion,
+    LeetcodeQuestionMetadata,
     TopicTag,
 )
 from app.utils.constants import (
@@ -16,10 +16,10 @@ from app.utils.constants import (
 )
 
 
-class QuestionsService:
-    async def fetch_question_list_metadata(
+class LeetcodeService:
+    async def fetch_leetcode_question_list_metadata(
         self, difficulty: Difficulty, topic_tag: Optional[TopicTag], page: int
-    ) -> list[QuestionMetadata]:
+    ) -> list[LeetcodeQuestionMetadata]:
         query = PROBLEM_SET_QUESTION_LIST_QUERY
 
         # Leetcode API doesn't support filtering by free problems only
@@ -53,9 +53,9 @@ class QuestionsService:
                     f"GraphQL error encountered while fetching questions: {data['errors']}"
                 )
 
-            return _filter_question_list_metadata(data=data)
+            return _filter_leetcode_question_list_metadata(data=data)
 
-    async def fetch_question(self, title_slug: str) -> Question:
+    async def fetch_leetcode_question(self, title_slug: str) -> LeetcodeQuestion:
         query = QUESTION_QUERY
         variables = {"titleSlug": title_slug}
         async with httpx.AsyncClient() as client:
@@ -73,16 +73,18 @@ class QuestionsService:
                 raise Exception(
                     f"GraphQL error encountered while fetching question data: {data['errors']}"
                 )
-            return _unwrap_question(data=data)
+            return _unwrap_leetcode_question(data=data)
 
 
-def _filter_question_list_metadata(data: dict) -> list[QuestionMetadata]:
+def _filter_leetcode_question_list_metadata(
+    data: dict,
+) -> list[LeetcodeQuestionMetadata]:
     """Helper function to extract filtered question list metadata from the Leetcode API response."""
     all_questions_metadata: list[dict] = (
         data.get("data", {}).get("problemsetQuestionList", {}).get("questions", [])
     )
     return [
-        QuestionMetadata.model_validate(
+        LeetcodeQuestionMetadata.model_validate(
             {k: v for k, v in q.items() if k != "isPaidOnly"}
         )
         for q in all_questions_metadata
@@ -90,10 +92,10 @@ def _filter_question_list_metadata(data: dict) -> list[QuestionMetadata]:
     ]
 
 
-def _unwrap_question(data: dict) -> Question:
+def _unwrap_leetcode_question(data: dict) -> LeetcodeQuestion:
     """Helper function to unwrap the question from the Leetcode API response."""
     question_dict: dict = data.get("data", {}).get("question", {})
-    return Question(
+    return LeetcodeQuestion(
         id=question_dict.get("questionId", ""),
         title=question_dict.get("title", ""),
         titleSlug=question_dict.get("titleSlug", ""),

@@ -4,17 +4,17 @@ import { Chase } from 'react-native-animated-spinkit';
 import RenderHtml from 'react-native-render-html';
 
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { fetchQuestionData } from '~/apis/questions';
+import { fetchLeetcodeQuestionData } from '~/apis/leetcode';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
-import { Question } from '~/lib/types/questions';
+import { LeetcodeQuestion } from '~/lib/types/leetcode';
 import { useColorScheme } from '~/lib/useColorScheme';
 
 export default function QuestionScreen() {
   const { isDarkColorScheme } = useColorScheme();
   const navigation = useNavigation();
   const { titleSlug } = useLocalSearchParams();
-  const [question, setQuestion] = useState<Question | null>(null);
+  const [question, setQuestion] = useState<LeetcodeQuestion | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { width } = useWindowDimensions();
 
@@ -103,7 +103,7 @@ export default function QuestionScreen() {
   useEffect(() => {
     const loadQuestionData = async () => {
       try {
-        const questionData = await fetchQuestionData(titleSlug as string);
+        const questionData = await fetchLeetcodeQuestionData(titleSlug as string);
         setQuestion(questionData);
       } catch (error) {
         console.error('Error fetching question data:', error);

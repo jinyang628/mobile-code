@@ -76,37 +76,30 @@ export const topicTag = z.enum([
 ]);
 export type TopicTag = z.infer<typeof topicTag>;
 
-export const questionFilters = z.object({
+export const leetcodeQuestionFilters = z.object({
   difficulty: difficulty,
   topicTag: topicTag,
   page: z.number(),
 });
 
-export type QuestionFilters = z.infer<typeof questionFilters>;
+export type LeetcodeQuestionFilters = z.infer<typeof leetcodeQuestionFilters>;
 
-export const defaultQuestionFilters: QuestionFilters = {
+export const defaultLeetcodeQuestionFilters: LeetcodeQuestionFilters = {
   difficulty: 'Medium',
   topicTag: 'array',
   page: 1,
 };
 
-export const questionMetadata = z.object({
+export const leetcodeQuestionMetadata = z.object({
   id: z.string(),
   title: z.string(),
   titleSlug: z.string(),
 });
 
-export type QuestionMetadata = z.infer<typeof questionMetadata>;
+export type LeetcodeQuestionMetadata = z.infer<typeof leetcodeQuestionMetadata>;
 
-export const codeSnippet = z.object({
-  lang: z.string(),
-  code: z.string(),
-});
-
-export type CodeSnippet = z.infer<typeof codeSnippet>;
-
-export const question = questionMetadata.extend({
+export const leetcodeQuestion = leetcodeQuestionMetadata.extend({
   content: z.string(),
 });
 
-export type Question = z.infer<typeof question>;
+export type LeetcodeQuestion = z.infer<typeof leetcodeQuestion>;
