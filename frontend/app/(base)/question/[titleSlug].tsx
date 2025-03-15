@@ -5,6 +5,7 @@ import RenderHtml from 'react-native-render-html';
 
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { fetchQuestionData } from '~/apis/questions';
+import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import { Question } from '~/lib/types/questions';
 import { useColorScheme } from '~/lib/useColorScheme';
@@ -139,13 +140,21 @@ export default function QuestionScreen() {
   }
 
   return (
-    <ScrollView className="flex-1 p-4" style={{ backgroundColor }}>
+    <ScrollView className="flex-1 flex-grow px-6 pb-20 pt-6" style={{ backgroundColor }}>
       <RenderHtml
         contentWidth={width - 32}
         source={{ html: question.content }}
         baseStyle={htmlStyles.baseStyle}
         tagsStyles={htmlStyles.tagsStyles}
       />
+      <Button
+        className="mb-40 mt-6 items-center justify-center bg-blue-500 disabled:opacity-50 dark:bg-blue-400"
+        onPress={() => {
+          console.log('Begin Practice button pressed');
+        }}
+      >
+        <Text className="text-white">Begin Practice</Text>
+      </Button>
     </ScrollView>
   );
 }
