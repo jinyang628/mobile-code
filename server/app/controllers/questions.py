@@ -55,6 +55,7 @@ class QuestionsController:
                     title_slug=title_slug
                 )
                 log.info(f"{response.title} data retrieved successfully.")
+                print(response)
                 return response
             except Exception as e:
                 log.error(

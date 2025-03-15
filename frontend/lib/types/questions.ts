@@ -107,7 +107,6 @@ export type CodeSnippet = z.infer<typeof codeSnippet>;
 
 export const question = questionMetadata.extend({
   content: z.string(),
-  codeSnippets: z.array(codeSnippet),
 });
 
 export type Question = z.infer<typeof question>;

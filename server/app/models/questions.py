@@ -99,4 +99,3 @@ class CodeSnippet(BaseModel):
 
 class Question(QuestionMetadata):
     content: str
-    codeSnippets: list[CodeSnippet]

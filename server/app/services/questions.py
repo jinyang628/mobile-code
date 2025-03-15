@@ -3,7 +3,6 @@ from typing import Optional
 import httpx
 
 from app.models.questions import (
-    CodeSnippet,
     Difficulty,
     Question,
     QuestionMetadata,
@@ -99,11 +98,4 @@ def _unwrap_question(data: dict) -> Question:
         title=question_dict.get("title", ""),
         titleSlug=question_dict.get("titleSlug", ""),
         content=question_dict.get("content", ""),
-        codeSnippets=[
-            CodeSnippet(
-                lang=cs.get("lang", ""),
-                code=cs.get("code", ""),
-            )
-            for cs in question_dict.get("codeSnippets", [])
-        ],
     )
