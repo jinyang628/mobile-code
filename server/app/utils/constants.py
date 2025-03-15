@@ -24,3 +24,25 @@ PROBLEM_SET_QUESTION_LIST_QUERY = """query problemsetQuestionList($categorySlug:
         }
     }
 }"""
+
+
+QUESTION_QUERY = """query questionData($titleSlug: String!) {
+  question(titleSlug: $titleSlug) {
+    questionId
+    questionFrontendId
+    title
+    titleSlug
+    content
+    difficulty
+    exampleTestcases
+    topicTags {
+      name
+      slug
+    }
+    codeSnippets {
+      lang
+      langSlug
+      code
+    }
+  }
+}"""

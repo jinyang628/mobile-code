@@ -3,10 +3,10 @@ import { Chase } from 'react-native-animated-spinkit';
 
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
-import { getQuestions } from '~/apis/questions';
+import { fetchQuestionData, fetchQuestionListMetadata } from '~/apis/questions';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
-import { QuestionFilters, QuestionHeader } from '~/lib/types/questions';
+import { Question, QuestionFilters, QuestionMetadata } from '~/lib/types/questions';
 import { useColorScheme } from '~/lib/useColorScheme';
 
 type QuestionsScreenProps = {
@@ -21,12 +21,17 @@ export default function QuestionsScreen({
 }: QuestionsScreenProps) {
   const { isDarkColorScheme } = useColorScheme();
 
-  const { data: questions = [], isLoading } = useQuery<QuestionHeader[]>({
+  const { data: questions = [], isLoading } = useQuery<QuestionMetadata[]>({
     queryKey: ['questions', questionFilters],
-    queryFn: () => getQuestions(questionFilters),
+    queryFn: () => fetchQuestionListMetadata(questionFilters),
   });
 
   const contentColor = isDarkColorScheme ? '#FFFFFF' : '#000000';
+
+  const onQuestionSelected = async (titleSlug: string) => {
+    const question: Question = await fetchQuestionData(titleSlug);
+    console.log(question);
+  };
 
   const renderQuestions = () => {
     if (isLoading) {
@@ -44,6 +49,7 @@ export default function QuestionsScreen({
       <TouchableOpacity
         key={qn.id}
         className="mb-2 w-full items-center rounded-lg border-2 border-gray-900 p-4 dark:border-white"
+        onPress={() => onQuestionSelected(qn.titleSlug)}
       >
         <Text className="text-center text-lg">{qn.title}</Text>
       </TouchableOpacity>

@@ -86,11 +86,18 @@ class QuestionFilters(BaseModel):
     topic_tag: TopicTag  # Only permit a single tag for now
 
 
-class QuestionHeader(BaseModel):
+class QuestionMetadata(BaseModel):
     id: str  # stringified integer
     title: str  # Title of the problem shown to user in the UI
     titleSlug: str  # Slug used to query Leetcode API
 
 
-class Question(QuestionHeader):
-    pass
+class CodeSnippet(BaseModel):
+    lang: str
+    code: str
+
+
+class Question(QuestionMetadata):
+    content: str
+    exampleTestcases: str
+    codeSnippets: list[CodeSnippet]

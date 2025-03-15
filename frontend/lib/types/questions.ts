@@ -90,10 +90,25 @@ export const defaultQuestionFilters: QuestionFilters = {
   page: 1,
 };
 
-export const questionHeader = z.object({
+export const questionMetadata = z.object({
   id: z.string(),
   title: z.string(),
   titleSlug: z.string(),
 });
 
-export type QuestionHeader = z.infer<typeof questionHeader>;
+export type QuestionMetadata = z.infer<typeof questionMetadata>;
+
+export const codeSnippet = z.object({
+  lang: z.string(),
+  code: z.string(),
+});
+
+export type CodeSnippet = z.infer<typeof codeSnippet>;
+
+export const question = questionMetadata.extend({
+  content: z.string(),
+  exampleTestcases: z.string(),
+  codeSnippets: z.array(codeSnippet),
+});
+
+export type Question = z.infer<typeof question>;
