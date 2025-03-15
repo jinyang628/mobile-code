@@ -2,11 +2,12 @@ import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { Chase } from 'react-native-animated-spinkit';
 
 import { useQuery } from '@tanstack/react-query';
+import { router } from 'expo-router';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
-import { fetchQuestionData, fetchQuestionListMetadata } from '~/apis/questions';
+import { fetchQuestionListMetadata } from '~/apis/questions';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
-import { Question, QuestionFilters, QuestionMetadata } from '~/lib/types/questions';
+import { QuestionFilters, QuestionMetadata } from '~/lib/types/questions';
 import { useColorScheme } from '~/lib/useColorScheme';
 
 type QuestionsScreenProps = {
@@ -29,8 +30,7 @@ export default function QuestionsScreen({
   const contentColor = isDarkColorScheme ? '#FFFFFF' : '#000000';
 
   const onQuestionSelected = async (titleSlug: string) => {
-    const question: Question = await fetchQuestionData(titleSlug);
-    console.log(question);
+    router.push(`/question/${titleSlug}`);
   };
 
   const renderQuestions = () => {

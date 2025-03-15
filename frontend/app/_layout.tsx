@@ -7,7 +7,6 @@ import { PortalHost } from '@rn-primitives/portal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { ThemeToggle } from '~/components/ThemeToggle';
 import '~/global.css';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { NAV_THEME } from '~/lib/constants';
@@ -61,8 +60,7 @@ export default function RootLayout() {
               name="(base)"
               options={{
                 title: 'Mobile Code',
-                // eslint-disable-next-line react/no-unstable-nested-components
-                headerRight: () => <ThemeToggle />,
+                headerShown: false,
               }}
             />
           </Stack>
