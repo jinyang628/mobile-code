@@ -99,7 +99,6 @@ def _unwrap_question(data: dict) -> Question:
         title=question_dict.get("title", ""),
         titleSlug=question_dict.get("titleSlug", ""),
         content=question_dict.get("content", ""),
-        exampleTestcases=question_dict.get("exampleTestcases", ""),
         codeSnippets=[
             CodeSnippet(
                 lang=cs.get("lang", ""),

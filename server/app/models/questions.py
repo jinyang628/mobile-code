@@ -99,5 +99,4 @@ class CodeSnippet(BaseModel):
 
 class Question(QuestionMetadata):
     content: str
-    exampleTestcases: str
     codeSnippets: list[CodeSnippet]
