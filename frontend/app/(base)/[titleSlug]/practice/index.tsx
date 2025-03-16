@@ -63,10 +63,11 @@ export default function PracticeScreen() {
   }
 
   return (
-    <View className="flex-1 bg-gray-100 p-4 dark:bg-gray-900">
+    <View className="flex-1 bg-gray-100 dark:bg-gray-900">
+      {/* Scrollable Content */}
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ padding: 16 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 120 }}
         showsVerticalScrollIndicator={true}
       >
         <View className="mb-6 rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
@@ -116,7 +117,6 @@ export default function PracticeScreen() {
             <Text className="text-gray-700 dark:text-gray-300">{question.explanation}</Text>
           </View>
         )}
-        <View style={{ paddingBottom: 100 }} />
       </ScrollView>
 
       <PaginationBottomBar
