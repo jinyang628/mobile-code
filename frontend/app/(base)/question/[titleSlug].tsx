@@ -5,8 +5,10 @@ import RenderHtml from 'react-native-render-html';
 
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { fetchLeetcodeQuestionData } from '~/apis/leetcode';
+import { generatePracticeQuestions } from '~/apis/practice';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
+import usePracticeQuestionsStore from '~/lib/stores/practice';
 import { LeetcodeQuestion } from '~/lib/types/leetcode';
 import { useColorScheme } from '~/lib/useColorScheme';
 
@@ -17,6 +19,7 @@ export default function QuestionScreen() {
   const [question, setQuestion] = useState<LeetcodeQuestion | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { width } = useWindowDimensions();
+  const { setPracticeQuestions, shouldRegenerateQuestions } = usePracticeQuestionsStore();
 
   const contentColor = isDarkColorScheme ? '#FFFFFF' : '#000000';
   const backgroundColor = isDarkColorScheme ? '#1A1A1A' : '#FFFFFF';
@@ -101,18 +104,51 @@ export default function QuestionScreen() {
   };
 
   useEffect(() => {
-    const loadQuestionData = async () => {
+    const loadQuestionData = async (): Promise<LeetcodeQuestion | null> => {
       try {
         const questionData = await fetchLeetcodeQuestionData(titleSlug as string);
         setQuestion(questionData);
+
+        return questionData;
       } catch (error) {
         console.error('Error fetching question data:', error);
+
+        return null;
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadQuestionData();
+    const optimisticallyGeneratePracticeQuestions = async (leetcodeQuestion: LeetcodeQuestion) => {
+      try {
+        if (!shouldRegenerateQuestions(leetcodeQuestion.titleSlug)) {
+          console.log('Fetching cached, recently gennerated practice questions');
+
+          return;
+        }
+
+        setPracticeQuestions(
+          await generatePracticeQuestions(leetcodeQuestion),
+          leetcodeQuestion.titleSlug,
+        );
+      } catch (error) {
+        console.error('Error generating practice questions:', error);
+      }
+    };
+
+    const initializeData = async () => {
+      try {
+        const leetcodeQuestion: LeetcodeQuestion | null = await loadQuestionData();
+        if (!leetcodeQuestion) {
+          return;
+        }
+        await optimisticallyGeneratePracticeQuestions(leetcodeQuestion);
+      } catch (error) {
+        console.error('Error initializing data:', error);
+      }
+    };
+
+    initializeData();
   }, [titleSlug]);
 
   useEffect(() => {

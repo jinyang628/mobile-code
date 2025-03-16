@@ -3,7 +3,7 @@ import logging
 import httpx
 from fastapi import APIRouter, HTTPException
 
-from app.models.questions import (
+from app.models.leetcode import (
     Difficulty,
     LeetcodeQuestion,
     LeetcodeQuestionMetadata,
@@ -60,7 +60,6 @@ class LeetcodeController:
                     title_slug=title_slug
                 )
                 log.info(f"{response.title} data retrieved successfully.")
-                print(response)
                 return response
             except Exception as e:
                 log.error(

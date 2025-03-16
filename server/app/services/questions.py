@@ -2,7 +2,7 @@ from typing import Optional
 
 import httpx
 
-from app.models.questions import (
+from app.models.leetcode import (
     Difficulty,
     LeetcodeQuestion,
     LeetcodeQuestionMetadata,

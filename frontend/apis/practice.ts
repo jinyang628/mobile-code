@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { LeetcodeQuestion } from '~/lib/types/leetcode';
+import { PracticeQuestion, practiceQuestion } from '~/lib/types/practice';
 
 export async function generatePracticeQuestions(
   leetcodeQuestion: LeetcodeQuestion,
