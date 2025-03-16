@@ -21,6 +21,7 @@ const usePracticeQuestionsStore = create<PracticeQuestionsState>((set, get) => (
   cachedQuestionsData: null,
 
   setPracticeQuestions: (practiceQuestions: PracticeQuestions, key: string) => {
+    console.log('Setting practice questions');
     if (practiceQuestions.questions.length === 0) {
       console.error('Cannot set practice questions with zero length');
 
@@ -42,17 +43,25 @@ const usePracticeQuestionsStore = create<PracticeQuestionsState>((set, get) => (
     // Regenerate if:
     // 1. No cached data exists
     if (!cachedQuestionsData) {
+      console.log('No cached data exists');
+
       return true;
     }
 
     // 2. Keys don't match
     if (cachedQuestionsData.key !== key) {
+      console.log(
+        `Cached keys don't match. Current key: ${key} vs Cached key: ${cachedQuestionsData.key}`,
+      );
+
       return true;
     }
 
     // 3. Cache has expired (older than 1 hour)
     const currentTime = Date.now();
     if (currentTime - cachedQuestionsData.timestamp > CACHE_EXPIRY_TIME) {
+      console.log('Cache has expired');
+
       return true;
     }
 

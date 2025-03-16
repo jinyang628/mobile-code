@@ -22,6 +22,15 @@ export default function BaseLayout() {
           headerRight: () => <ThemeToggle />,
         }}
       />
+      <Stack.Screen
+        name="question/[titleSlug]/practice"
+        options={{
+          headerTitle: 'Practice',
+          headerShown: true,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          headerRight: () => <ThemeToggle />,
+        }}
+      />
     </Stack>
   );
 }

@@ -10,6 +10,7 @@ export type MultipleChoiceOption = z.infer<typeof multipleChoiceOption>;
 export const practiceQuestion = z.object({
   description: z.string(),
   options: z.array(multipleChoiceOption),
+  explanation: z.string(),
 });
 
 export type PracticeQuestion = z.infer<typeof practiceQuestion>;

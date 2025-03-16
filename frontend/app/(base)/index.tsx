@@ -8,8 +8,8 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import FiltersScreen from '~/components/index/filters';
-import QuestionsScreen from '~/components/index/questions';
+import FiltersScreen from '~/components/screens/filters';
+import QuestionsScreen from '~/components/screens/questions';
 import {
   Difficulty,
   LeetcodeQuestionFilters,

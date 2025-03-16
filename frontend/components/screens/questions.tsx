@@ -3,9 +3,8 @@ import { Chase } from 'react-native-animated-spinkit';
 
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { fetchLeetcodeQuestionListMetadata } from '~/apis/leetcode';
-import { Button } from '~/components/ui/button';
+import PaginationBottomBar from '~/components/shared/pagination-bottom-bar';
 import { Text } from '~/components/ui/text';
 import { LeetcodeQuestionFilters, LeetcodeQuestionMetadata } from '~/lib/types/leetcode';
 import { useColorScheme } from '~/lib/useColorScheme';
@@ -60,23 +59,15 @@ export default function QuestionsScreen({
     <SafeAreaView className="flex-1">
       <View className="flex-1 pb-24">{renderQuestions()}</View>
 
-      <View className="absolute bottom-20 left-0 right-0 flex-row items-center justify-between px-4">
-        <Button
-          disabled={questionFilters.page === 1 || isLoading}
-          className="w-15 aspect-square items-center justify-center bg-blue-500 disabled:opacity-50 dark:bg-blue-400"
-          onPress={onPageDecrement}
-        >
-          <ChevronLeft size={25} color={contentColor} />
-        </Button>
-        <Text className="text-lg font-bold">Page {questionFilters.page}</Text>
-        <Button
-          className="w-15 aspect-square items-center justify-center bg-blue-500 disabled:opacity-50 dark:bg-blue-400"
-          disabled={questions.length === 0 || isLoading}
-          onPress={onPageIncrement}
-        >
-          <ChevronRight size={25} color={contentColor} />
-        </Button>
-      </View>
+      <PaginationBottomBar
+        pageText="Page"
+        pageNumber={questionFilters.page}
+        contentColor={contentColor}
+        isPageDecrementDisabled={questionFilters.page === 1 || isLoading}
+        isPageIncrementDisabled={questions.length === 0 || isLoading}
+        onPageDecrement={onPageDecrement}
+        onPageIncrement={onPageIncrement}
+      />
     </SafeAreaView>
   );
 }

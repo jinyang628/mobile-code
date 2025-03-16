@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { Chase } from 'react-native-animated-spinkit';
 import RenderHtml from 'react-native-render-html';
 
 import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { router } from 'expo-router';
 import { fetchLeetcodeQuestionData } from '~/apis/leetcode';
 import { generatePracticeQuestions } from '~/apis/practice';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import usePracticeQuestionsStore from '~/lib/stores/practice';
 import { LeetcodeQuestion } from '~/lib/types/leetcode';
+import { PracticeQuestions } from '~/lib/types/practice';
 import { useColorScheme } from '~/lib/useColorScheme';
 
 export default function QuestionScreen() {
@@ -18,8 +20,13 @@ export default function QuestionScreen() {
   const { titleSlug } = useLocalSearchParams();
   const [question, setQuestion] = useState<LeetcodeQuestion | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
   const { width } = useWindowDimensions();
-  const { setPracticeQuestions, shouldRegenerateQuestions } = usePracticeQuestionsStore();
+  const { practiceQuestions, setPracticeQuestions, shouldRegenerateQuestions } =
+    usePracticeQuestionsStore();
+
+  const practiceQuestionsRef = useRef<PracticeQuestions | null>(null);
+  practiceQuestionsRef.current = practiceQuestions;
 
   const contentColor = isDarkColorScheme ? '#FFFFFF' : '#000000';
   const backgroundColor = isDarkColorScheme ? '#1A1A1A' : '#FFFFFF';
@@ -122,7 +129,7 @@ export default function QuestionScreen() {
     const optimisticallyGeneratePracticeQuestions = async (leetcodeQuestion: LeetcodeQuestion) => {
       try {
         if (!shouldRegenerateQuestions(leetcodeQuestion.titleSlug)) {
-          console.log('Fetching cached, recently gennerated practice questions');
+          console.log('Fetching cached, recently generated practice questions');
 
           return;
         }
@@ -159,6 +166,22 @@ export default function QuestionScreen() {
     }
   }, [question, navigation]);
 
+  const handleBeginPractice = () => {
+    if (practiceQuestionsRef.current && practiceQuestionsRef.current.questions.length > 0) {
+      router.push(`/question/${titleSlug}/practice`);
+    } else {
+      setIsButtonLoading(true);
+      const interval = setInterval(() => {
+        console.log(practiceQuestionsRef.current);
+        if (practiceQuestionsRef.current && practiceQuestionsRef.current.questions.length > 0) {
+          clearInterval(interval);
+          setIsButtonLoading(false);
+          router.push(`/question/${titleSlug}/practice`);
+        }
+      }, 1000);
+    }
+  };
+
   if (isLoading) {
     return (
       <View className="flex items-center justify-center p-8">
@@ -185,11 +208,16 @@ export default function QuestionScreen() {
       />
       <Button
         className="mb-40 mt-6 items-center justify-center bg-blue-500 disabled:opacity-50 dark:bg-blue-400"
-        onPress={() => {
-          console.log('Begin Practice button pressed');
-        }}
+        disabled={isButtonLoading}
+        onPress={handleBeginPractice}
       >
-        <Text className="text-white">Begin Practice</Text>
+        {isButtonLoading ? (
+          <View className="flex items-center justify-center p-8">
+            <Chase size={32} color={contentColor} />
+          </View>
+        ) : (
+          <Text className="text-white">Begin Practice</Text>
+        )}
       </Button>
     </ScrollView>
   );
