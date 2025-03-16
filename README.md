@@ -2,6 +2,11 @@
 
 Practice LeetCode problems on mobile.
 
+## Tech Stack
+
+- Expo (React Native) with [React Native Reusables](https://rnr-docs.vercel.app/getting-started/introduction/)
+- FastAPI
+
 ## Development
 
 ### Style Enforcement
