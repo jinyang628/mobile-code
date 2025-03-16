@@ -1,3 +1,4 @@
+from dotenv import find_dotenv, load_dotenv
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 
@@ -7,6 +8,8 @@ from app.inference.prompts.practice import (
 )
 from app.models.leetcode import LeetcodeQuestion
 from app.models.practice import PracticeQuestions
+
+load_dotenv(find_dotenv(filename=".env"))
 
 structured_llm = init_chat_model("gpt-4o-mini", model_provider="openai").with_structured_output(
     PracticeQuestions

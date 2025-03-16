@@ -29,5 +29,6 @@ cp .env.example .env
 To spin up the server, run the following command at the `server` directory:
 
 ```bash
-poetry run uvicorn app.api.main:app --reload --host 0.0.0.0 --port 8080 --env-file .env
+poetry run uvicorn app.api.main:app --reload --host 0.0.0.0 --port 8080 --env-file .env # Default option
+poetry run uvicorn app.api.main:app --reload --host 0.0.0.0 --port 8080 # Render does not support --env-file option
 ```
