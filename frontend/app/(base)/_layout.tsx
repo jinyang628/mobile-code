@@ -3,7 +3,7 @@ import { ThemeToggle } from '~/components/ThemeToggle';
 
 export default function BaseLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack>
       <Stack.Screen
         name="index"
         options={{
@@ -14,16 +14,22 @@ export default function BaseLayout() {
         }}
       />
       <Stack.Screen
-        name="question/[titleSlug]"
-        options={{
-          headerTitle: 'Question',
-          headerShown: true,
-          // eslint-disable-next-line react/no-unstable-nested-components
-          headerRight: () => <ThemeToggle />,
+        name="[titleSlug]/index"
+        options={({ route }) => {
+          const { titleSlug } = route.params || {};
+
+          return {
+            headerTitle: titleSlug
+              ? titleSlug.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())
+              : 'Question',
+            headerShown: true,
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerRight: () => <ThemeToggle />,
+          };
         }}
       />
       <Stack.Screen
-        name="question/[titleSlug]/practice"
+        name="[titleSlug]/practice/index"
         options={{
           headerTitle: 'Practice',
           headerShown: true,

@@ -29,7 +29,7 @@ export default function QuestionsScreen({
   const contentColor = isDarkColorScheme ? '#FFFFFF' : '#000000';
 
   const onQuestionSelected = async (titleSlug: string) => {
-    router.push(`/question/${titleSlug}`);
+    router.push(`/${titleSlug}`);
   };
 
   const renderQuestions = () => {

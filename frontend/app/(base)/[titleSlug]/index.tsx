@@ -3,7 +3,7 @@ import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { Chase } from 'react-native-animated-spinkit';
 import RenderHtml from 'react-native-render-html';
 
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { router } from 'expo-router';
 import { fetchLeetcodeQuestionData } from '~/apis/leetcode';
 import { generatePracticeQuestions } from '~/apis/practice';
@@ -16,7 +16,6 @@ import { useColorScheme } from '~/lib/useColorScheme';
 
 export default function QuestionScreen() {
   const { isDarkColorScheme } = useColorScheme();
-  const navigation = useNavigation();
   const { titleSlug } = useLocalSearchParams();
   const [question, setQuestion] = useState<LeetcodeQuestion | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -158,17 +157,9 @@ export default function QuestionScreen() {
     initializeData();
   }, [titleSlug]);
 
-  useEffect(() => {
-    if (question) {
-      navigation.setOptions({
-        headerTitle: question.title,
-      });
-    }
-  }, [question, navigation]);
-
   const handleBeginPractice = () => {
     if (practiceQuestionsRef.current && practiceQuestionsRef.current.questions.length > 0) {
-      router.push(`/question/${titleSlug}/practice`);
+      router.push(`/${titleSlug}/practice`);
     } else {
       setIsButtonLoading(true);
       const interval = setInterval(() => {
@@ -176,7 +167,7 @@ export default function QuestionScreen() {
         if (practiceQuestionsRef.current && practiceQuestionsRef.current.questions.length > 0) {
           clearInterval(interval);
           setIsButtonLoading(false);
-          router.push(`/question/${titleSlug}/practice`);
+          router.push(`/${titleSlug}/practice`);
         }
       }, 1000);
     }
