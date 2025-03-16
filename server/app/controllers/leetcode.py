@@ -45,9 +45,7 @@ class LeetcodeController:
                     "Unexpected error in questions controller while fetching list of question metadata: %s",
                     str(e),
                 )
-                raise HTTPException(
-                    status_code=httpx.codes.INTERNAL_SERVER_ERROR, detail=str(e)
-                )
+                raise HTTPException(status_code=httpx.codes.INTERNAL_SERVER_ERROR, detail=str(e))
 
         @router.get(
             "",
@@ -66,6 +64,4 @@ class LeetcodeController:
                     "Unexpected error in questions controller while fetching question data: %s",
                     str(e),
                 )
-                raise HTTPException(
-                    status_code=httpx.codes.INTERNAL_SERVER_ERROR, detail=str(e)
-                )
+                raise HTTPException(status_code=httpx.codes.INTERNAL_SERVER_ERROR, detail=str(e))

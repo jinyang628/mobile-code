@@ -28,10 +28,8 @@ class PracticeController:
             leetcode_question: LeetcodeQuestion,
         ) -> PracticeQuestions:
             log.info("Generating practice questions...")
-            response: PracticeQuestions = (
-                await self.service.generate_practice_questions(
-                    leetcode_question=leetcode_question
-                )
+            response: PracticeQuestions = await self.service.generate_practice_questions(
+                leetcode_question=leetcode_question
             )
             log.info("Practice questions generated successfully.")
             return response

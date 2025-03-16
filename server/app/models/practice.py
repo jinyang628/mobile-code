@@ -17,6 +17,4 @@ class PracticeQuestion(BaseModel):
 
 
 class PracticeQuestions(BaseModel):
-    questions: list[PracticeQuestion] = Field(
-        description="The list of practice questions"
-    )
+    questions: list[PracticeQuestion] = Field(description="The list of practice questions")

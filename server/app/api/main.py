@@ -37,7 +37,7 @@ def create_app() -> FastAPI:
         # TODO: This is a quick fix to bypass CORS error. We need to ensure that the origin is shared in production / whitelist specific origins explicitly.
         app.add_middleware(
             CORSMiddleware,
-            allow_origins=["*"],
+            allow_origins=["http://localhost:8081"],
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
@@ -50,9 +50,7 @@ def create_app() -> FastAPI:
             log.error(f"{request}: {exc_str}")
 
             content = {"status_code": 10422, "message": exc_str, "data": None}
-            return JSONResponse(
-                content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
-            )
+            return JSONResponse(content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         return app
     except Exception as e:

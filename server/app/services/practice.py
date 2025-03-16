@@ -8,9 +8,9 @@ from app.inference.prompts.practice import (
 from app.models.leetcode import LeetcodeQuestion
 from app.models.practice import PracticeQuestions
 
-structured_llm = init_chat_model(
-    "gpt-4o-mini", model_provider="openai"
-).with_structured_output(PracticeQuestions)
+structured_llm = init_chat_model("gpt-4o-mini", model_provider="openai").with_structured_output(
+    PracticeQuestions
+)
 
 
 class PracticeService:
@@ -20,9 +20,7 @@ class PracticeService:
         messages: list[BaseMessage] = [
             SystemMessage(content=PRACTICE_SYSTEM_PROMPT),
             HumanMessage(
-                content=PRACTICE_USER_PROMPT_TEMPLATE.format(
-                    leetcode_question=leetcode_question
-                ),
+                content=PRACTICE_USER_PROMPT_TEMPLATE.format(leetcode_question=leetcode_question),
             ),
         ]
         response = await structured_llm.ainvoke(messages)

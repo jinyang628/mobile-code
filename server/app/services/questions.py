@@ -84,9 +84,7 @@ def _filter_leetcode_question_list_metadata(
         data.get("data", {}).get("problemsetQuestionList", {}).get("questions", [])
     )
     return [
-        LeetcodeQuestionMetadata.model_validate(
-            {k: v for k, v in q.items() if k != "isPaidOnly"}
-        )
+        LeetcodeQuestionMetadata.model_validate({k: v for k, v in q.items() if k != "isPaidOnly"})
         for q in all_questions_metadata
         if not q["isPaidOnly"]
     ]
