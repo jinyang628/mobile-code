@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from app.models.leetcode import (
     LeetcodeQuestion,
 )
-from app.models.practice import PracticeQuestion
+from app.models.practice import PracticeQuestions
 from app.services.practice import PracticeService
 
 log = logging.getLogger(__name__)
@@ -22,13 +22,13 @@ class PracticeController:
 
         @router.post(
             "",
-            response_model=list[PracticeQuestion],
+            response_model=PracticeQuestions,
         )
         async def generate_practice_questions(
             leetcode_question: LeetcodeQuestion,
-        ) -> list[PracticeQuestion]:
+        ) -> PracticeQuestions:
             log.info("Generating practice questions...")
-            response: list[PracticeQuestion] = (
+            response: PracticeQuestions = (
                 await self.service.generate_practice_questions(
                     leetcode_question=leetcode_question
                 )

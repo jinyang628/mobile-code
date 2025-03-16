@@ -13,3 +13,9 @@ export const practiceQuestion = z.object({
 });
 
 export type PracticeQuestion = z.infer<typeof practiceQuestion>;
+
+export const practiceQuestions = z.object({
+  questions: z.array(practiceQuestion),
+});
+
+export type PracticeQuestions = z.infer<typeof practiceQuestions>;

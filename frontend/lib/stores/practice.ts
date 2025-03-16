@@ -1,26 +1,31 @@
 import { create } from 'zustand';
-import { PracticeQuestion } from '~/lib/types/practice';
+import { PracticeQuestions } from '~/lib/types/practice';
 
 interface CachedPracticeQuestions {
   key: string;
-  questions: PracticeQuestion[];
+  questions: PracticeQuestions;
   timestamp: number;
 }
 
 interface PracticeQuestionsState {
-  practiceQuestions: PracticeQuestion[];
+  practiceQuestions: PracticeQuestions | null;
   cachedQuestionsData: CachedPracticeQuestions | null;
-  setPracticeQuestions: (questions: PracticeQuestion[], key: string) => void;
+  setPracticeQuestions: (questions: PracticeQuestions, key: string) => void;
   shouldRegenerateQuestions: (key: string) => boolean;
 }
 
 const CACHE_EXPIRY_TIME: number = 60 * 60 * 1000; // 1 hour in milliseconds
 
 const usePracticeQuestionsStore = create<PracticeQuestionsState>((set, get) => ({
-  practiceQuestions: [],
+  practiceQuestions: null,
   cachedQuestionsData: null,
 
-  setPracticeQuestions: (practiceQuestions: PracticeQuestion[], key: string) =>
+  setPracticeQuestions: (practiceQuestions: PracticeQuestions, key: string) => {
+    if (practiceQuestions.questions.length === 0) {
+      console.error('Cannot set practice questions with zero length');
+
+      return;
+    }
     set({
       practiceQuestions,
       cachedQuestionsData: {
@@ -28,7 +33,8 @@ const usePracticeQuestionsStore = create<PracticeQuestionsState>((set, get) => (
         questions: practiceQuestions,
         timestamp: Date.now(),
       },
-    }),
+    });
+  },
 
   shouldRegenerateQuestions: (key: string) => {
     const { cachedQuestionsData } = get();

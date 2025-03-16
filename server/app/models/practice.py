@@ -11,3 +11,9 @@ class PracticeQuestion(BaseModel):
     options: list[MultipleChoiceOption] = Field(
         description="2-4 relevant multiple choice options for the problem description. Only one option should be correct"
     )
+
+
+class PracticeQuestions(BaseModel):
+    questions: list[PracticeQuestion] = Field(
+        description="The list of practice questions"
+    )
