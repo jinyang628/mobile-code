@@ -2,6 +2,8 @@
 
 Practice LeetCode problems on mobile.
 
+https://github.com/user-attachments/assets/0c0cc999-ea74-4675-906f-85dd63c3f13f
+
 ## Tech Stack
 
 - Mobile Frontend: Expo (React Native) with [React Native Reusables](https://rnr-docs.vercel.app/getting-started/introduction/)
