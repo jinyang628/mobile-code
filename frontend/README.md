@@ -12,6 +12,12 @@ pnpm install
 pnpm dev
 ```
 
+## Check health of dependencies
+
+```bash
+npx expo-doctor
+```
+
 ## Credits
 
 UI components: <https://github.com/mrzachnugent/react-native-reusables>
