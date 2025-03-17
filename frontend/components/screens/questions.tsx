@@ -57,7 +57,7 @@ export default function QuestionsScreen({
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 pb-24">{renderQuestions()}</View>
+      <View className="flex-1 pb-20">{renderQuestions()}</View>
 
       <PaginationBottomBar
         pageText="Page"
