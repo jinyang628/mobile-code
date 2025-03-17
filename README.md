@@ -1,6 +1,6 @@
 # Mobile Code
 
-Practice LeetCode problems on mobile.
+Practice LeetCode problems on the phone!
 
 https://github.com/user-attachments/assets/0c0cc999-ea74-4675-906f-85dd63c3f13f
 
