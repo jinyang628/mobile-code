@@ -25,8 +25,13 @@ export default function PaginationBottomBar({
   onPageIncrement,
 }: PaginationBottomBarProps) {
   return (
-    <View className="absolute bottom-20 left-0 right-0">
-      <BlurView intensity={80} tint="dark" />
+    <View className="bottom-30 absolute left-0 right-0">
+      <BlurView
+        style={[{ backgroundColor: contentColor }]}
+        intensity={80}
+        tint="dark"
+        experimentalBlurMethod="dimezisBlurView"
+      />
 
       <View className="flex-row items-center justify-between px-4">
         <Button
